@@ -1,6 +1,26 @@
 #include "SFML3D.h"
 
+float dot(v3d& a, v3d& b)
+{
+    float l1 = sqrtf(a.x * a.x + a.y * a.y + a.z * a.z);
+    v3d vec1{ a.x / l1, a.y / l1, a.z / l1 };
+    float l2 = sqrtf(b.x * b.x + b.y * b.y + b.z * b.z);
+    v3d vec2{ b.x / l2, b.y / l2, b.z / l2 };
 
+    return (vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z);
+
+}
+
+v3d crossProd(Line3D& a, Line3D& b)
+{
+    v3d n{ 0.f,0.f,0.f };
+    n.x = a.y * b.z - a.z * b.y;
+    n.y = a.z * b.x - a.x * b.z;
+    n.z = a.x * b.y - a.y * b.x;
+
+    return n;
+
+}
 
 void drawLine(Line& line_, sf::RenderWindow& wnd_)
 {
@@ -17,13 +37,23 @@ void drawLine(Line& line_, sf::RenderWindow& wnd_)
 
 void drawTriangle(Tri2D& tri_, sf::RenderWindow& wnd_, float posx_, float posy_)
 {
-    Line line1{ tri_.vertices[0].x , tri_.vertices[0].y ,  tri_.vertices[1].x , tri_.vertices[1].y };
-    Line line2{ tri_.vertices[1].x , tri_.vertices[1].y ,  tri_.vertices[2].x , tri_.vertices[2].y  };
-    Line line3{ tri_.vertices[2].x , tri_.vertices[2].y ,  tri_.vertices[0].x , tri_.vertices[0].y  };
+   // Line line1{ tri_.vertices[0].x , tri_.vertices[0].y ,  tri_.vertices[1].x , tri_.vertices[1].y };
+   // Line line2{ tri_.vertices[1].x , tri_.vertices[1].y ,  tri_.vertices[2].x , tri_.vertices[2].y  };
+   // Line line3{ tri_.vertices[2].x , tri_.vertices[2].y ,  tri_.vertices[0].x , tri_.vertices[0].y  };
 
-    drawLine(line1, wnd_);
-    drawLine(line2, wnd_);
-    drawLine(line3, wnd_);
+    sf::ConvexShape triangle{ 3 };
+    triangle.setPoint(0, tri_.vertices[0]);
+    triangle.setPoint(1, tri_.vertices[1]);
+    triangle.setPoint(2, tri_.vertices[2]);
+    triangle.setFillColor(sf::Color::Red);
+
+
+    wnd_.draw(triangle);
+
+
+   // drawLine(line1, wnd_);
+   // drawLine(line2, wnd_);
+   // drawLine(line3, wnd_);
 }
 
 void MulMatVec(v3d& i, v3d& o, Mat4x4& m)
@@ -125,7 +155,7 @@ bool SFML3D::onUserUpdate(float elapsedTime)
     for (auto& tri : cubeMesh.tris)
     {
         Tri3D triProjected, triTranslated, triRotatedZ, triRotatedZX;
-        
+
         MulMatVec(tri.p[0], triRotatedZ.p[0], matRotZ);
         MulMatVec(tri.p[1], triRotatedZ.p[1], matRotZ);
         MulMatVec(tri.p[2], triRotatedZ.p[2], matRotZ);
@@ -140,56 +170,72 @@ bool SFML3D::onUserUpdate(float elapsedTime)
         triTranslated.p[2].z = triRotatedZX.p[2].z + 3.f;
 
 
-      //  
-      //  
-      //  
+        //  
+        //  
+        //  
 
-      // 
-      // 
-      // 
+        // 
+        // 
+        // 
 
-      //  triTranslated = triRotateZX;
-      //// triTranslated.p[0].x = (triRotateZX.p[0].x*sizex);
-      //// triTranslated.p[0].y = (triRotateZX.p[0].y*-sizey);
-      //  triTranslated.p[0].z = triRotateZX.p[0].z + 3.f;
-      //// triTranslated.p[1].x = (triRotateZX.p[1].x*sizex);
-      // //triTranslated.p[1].y = (triRotateZX.p[1].y*-sizey);
-      //  triTranslated.p[1].z = triRotateZX.p[1].z + 3.f;
-      //// triTranslated.p[2].x = (triRotateZX.p[2].x*sizex);
-      // //triTranslated.p[2].y = (triRotateZX.p[2].y*-sizey);
-      //  triTranslated.p[2].z = triRotateZX.p[2].z + 3.f;
-
-        MulMatVec(triTranslated.p[0], triProjected.p[0], matProj);
-        MulMatVec(triTranslated.p[1], triProjected.p[1], matProj);
-        MulMatVec(triTranslated.p[2], triProjected.p[2], matProj);
-
-        triProjected.p[0].x += 1.f; triProjected.p[0].y += 1.f;
-        triProjected.p[1].x += 1.f; triProjected.p[1].y += 1.f;
-        triProjected.p[2].x += 1.f; triProjected.p[2].y += 1.f;
-
-        triProjected.p[0].x *= 0.5f * (float)WW;
-        triProjected.p[0].y *= 0.5f * (float)WH;
-        triProjected.p[1].x *= 0.5f * (float)WW;
-        triProjected.p[1].y *= 0.5f * (float)WH;
-        triProjected.p[2].x *= 0.5f * (float)WW;
-        triProjected.p[2].y *= 0.5f * (float)WH;
+        //  triTranslated = triRotateZX;
+        //// triTranslated.p[0].x = (triRotateZX.p[0].x*sizex);
+        //// triTranslated.p[0].y = (triRotateZX.p[0].y*-sizey);
+        //  triTranslated.p[0].z = triRotateZX.p[0].z + 3.f;
+        //// triTranslated.p[1].x = (triRotateZX.p[1].x*sizex);
+        // //triTranslated.p[1].y = (triRotateZX.p[1].y*-sizey);
+        //  triTranslated.p[1].z = triRotateZX.p[1].z + 3.f;
+        //// triTranslated.p[2].x = (triRotateZX.p[2].x*sizex);
+        // //triTranslated.p[2].y = (triRotateZX.p[2].y*-sizey);
+        //  triTranslated.p[2].z = triRotateZX.p[2].z + 3.f;
 
 
+        v3d normal;
+        Line3D line1{ triTranslated.p[1].x - triTranslated.p[0].x, triTranslated.p[1].y - triTranslated.p[0].y, triTranslated.p[1].z - triTranslated.p[0].z };
+        Line3D line2{ triTranslated.p[2].x - triTranslated.p[0].x, triTranslated.p[2].y - triTranslated.p[0].y, triTranslated.p[2].z - triTranslated.p[0].z };
 
-       // triProjected.p[0].x = (triProjected.p[0].x * sizex);
-       // triProjected.p[0].y = (triProjected.p[0].y * -sizey);
-       //// triProjected.p[0].z = triRotateZX.p[0].z + 3.f;
-       // triProjected.p[1].x = (triProjected.p[1].x * sizex);
-       // triProjected.p[1].y = (triProjected.p[1].y * -sizey);
-       //// triProjected.p[1].z = triRotateZX.p[1].z + 3.f;
-       // triProjected.p[2].x = (triProjected.p[2].x * sizex);
-       // triProjected.p[2].y = (triProjected.p[2].y * -sizey);
-      //  triProjected.p[2].z = triRotateZX.p[2].z + 3.f;
+        normal = crossProd(line1, line2);
+        
+        float l = sqrtf(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
+        normal.x /= 1.f; normal.y /= 1.f; normal.z /= 1.f;
+        
+      /*  if (normal.z < 0)*/
+        if(normal.x*(triTranslated.p[0].x - vCam.x) +
+            normal.y * (triTranslated.p[0].y - vCam.y) +
+            normal.z * (triTranslated.p[0].z - vCam.z) < 0.0f)
+        {
+            MulMatVec(triTranslated.p[0], triProjected.p[0], matProj);
+            MulMatVec(triTranslated.p[1], triProjected.p[1], matProj);
+            MulMatVec(triTranslated.p[2], triProjected.p[2], matProj);
 
-        Tri2D tri2d{ {triProjected.p[0].x, triProjected.p[0].y},{triProjected.p[1].x,triProjected.p[1].y}, {triProjected.p[2].x, triProjected.p[2].y}};
-       // Tri2D tri2d{ {posx + (0.f * sizex), posy + (0.f * -sizey)},{posx + (0.5f * sizex), posy + (1.f * sizey)}, {posx + (1.f * sizex), posy + (0.f * sizey)} };
+            triProjected.p[0].x += 1.f; triProjected.p[0].y += 1.f;
+            triProjected.p[1].x += 1.f; triProjected.p[1].y += 1.f;
+            triProjected.p[2].x += 1.f; triProjected.p[2].y += 1.f;
 
-        drawTriangle(tri2d, *pWnd, 0.f,0.f);
+            triProjected.p[0].x *= 0.5f * (float)WW;
+            triProjected.p[0].y *= 0.5f * (float)WH;
+            triProjected.p[1].x *= 0.5f * (float)WW;
+            triProjected.p[1].y *= 0.5f * (float)WH;
+            triProjected.p[2].x *= 0.5f * (float)WW;
+            triProjected.p[2].y *= 0.5f * (float)WH;
+
+
+
+            // triProjected.p[0].x = (triProjected.p[0].x * sizex);
+            // triProjected.p[0].y = (triProjected.p[0].y * -sizey);
+            //// triProjected.p[0].z = triRotateZX.p[0].z + 3.f;
+            // triProjected.p[1].x = (triProjected.p[1].x * sizex);
+            // triProjected.p[1].y = (triProjected.p[1].y * -sizey);
+            //// triProjected.p[1].z = triRotateZX.p[1].z + 3.f;
+            // triProjected.p[2].x = (triProjected.p[2].x * sizex);
+            // triProjected.p[2].y = (triProjected.p[2].y * -sizey);
+           //  triProjected.p[2].z = triRotateZX.p[2].z + 3.f;
+
+            Tri2D tri2d{ {triProjected.p[0].x, triProjected.p[0].y},{triProjected.p[1].x,triProjected.p[1].y}, {triProjected.p[2].x, triProjected.p[2].y} };
+            // Tri2D tri2d{ {posx + (0.f * sizex), posy + (0.f * -sizey)},{posx + (0.5f * sizex), posy + (1.f * sizey)}, {posx + (1.f * sizex), posy + (0.f * sizey)} };
+
+            drawTriangle(tri2d, *pWnd, 0.f, 0.f);
+        }
     }
    
     pWnd->display();

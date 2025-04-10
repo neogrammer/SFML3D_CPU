@@ -89,11 +89,17 @@ struct Tri2D
 
 };
 
-
+struct Line3D
+{
+    float x;
+    float y;
+    float z;
+};
 
 struct Tri3D {
     v3d p[3];
 };
+
 
 struct Mesh
 {
@@ -112,6 +118,9 @@ class SFML3D
     float fElapsedTime{ 0.f };
     float fTheta{ 0.f };
     Mat4x4 matProj{};
+
+    v3d vCam;
+
     Tri2D triangle;
     Mesh cubeMesh;
     // create an empty shape
