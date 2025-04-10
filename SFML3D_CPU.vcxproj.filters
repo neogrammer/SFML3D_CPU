@@ -16,6 +16,9 @@
     <Filter Include="headers">
       <UniqueIdentifier>{23ec8185-fff6-445a-8406-5037d17f2b9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="models">
+      <UniqueIdentifier>{9f0aff11-8cf9-4c48-bb85-4e3df4489c27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -29,5 +32,45 @@
     <ClInclude Include="src\app\SFML3D.h">
       <Filter>headers</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="models\torus.txt">
+      <Filter>models</Filter>
+    </Text>
+    <Text Include="models\simple_pyramid.txt">
+      <Filter>models</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="models\simple_pyramid.cid">
+      <Filter>models</Filter>
+    </None>
+    <None Include="models\simple_pyramid_corrected.cid">
+      <Filter>models</Filter>
+    </None>
+    <None Include="models\simple_pyramid_final.cid">
+      <Filter>models</Filter>
+    </None>
+    <None Include="models\simple_pyramid_fixed.cid">
+      <Filter>models</Filter>
+    </None>
+    <None Include="models\statue_glydon.cid">
+      <Filter>models</Filter>
+    </None>
+    <None Include="models\statue_glydon_fixed.cid">
+      <Filter>models</Filter>
+    </None>
+    <None Include="models\statue_glydon_final.cid">
+      <Filter>models</Filter>
+    </None>
+    <None Include="models\statue_glydon_cleaned.cid">
+      <Filter>models</Filter>
+    </None>
+    <None Include="models\statue_glydon_rebuilt.cid">
+      <Filter>models</Filter>
+    </None>
+    <None Include="models\lowpoly_skull.cid">
+      <Filter>models</Filter>
+    </None>
   </ItemGroup>
 </Project>

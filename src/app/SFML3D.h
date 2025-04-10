@@ -4,6 +4,9 @@
 #include <math.h>
 #include <corecrt_math_defines.h>
 #include <array>
+#include <string>
+#include <sstream>
+#include <fstream>
 #include <vector>
 
 constexpr uint32_t WW = 1600Ui32;
@@ -96,15 +99,35 @@ struct Line3D
     float z;
 };
 
+
+enum class ShadeStyle
+{
+    PIXEL_QUARTER,
+    PIXEL_HALF,
+    PIXEL_THREEQUARTERS,
+    PIXEL_SOLID
+};
+
+struct COLOR
+{
+    sf::Color bgCol;
+    sf::Color fgCol;
+    ShadeStyle sym;
+};
+
+
 struct Tri3D {
-    v3d p[3];
+    v3d p[3]{};
+
+    ShadeStyle sym{};
+    sf::Color col{};
 };
 
 
 struct Mesh
 {
     std::vector<Tri3D> tris;
-
+    bool LoadFromObjectFile(std::string filename);
 };
 
 struct Mat4x4
@@ -116,7 +139,7 @@ class SFML3D
 {
 
    
-
+    
     sf::Clock timer{};
     float fElapsedTime{ 0.f };
     float fTheta{ 0.f };
@@ -130,6 +153,7 @@ class SFML3D
     sf::RenderWindow* pWnd{ nullptr };
 public:
     static bool wireframe;
+    bool drawBoth{ false };
 
     SFML3D(sf::RenderWindow& wnd_);
     ~SFML3D();

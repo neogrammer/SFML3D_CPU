@@ -102,11 +102,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>SFML_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SILENCE_CXX17_STRSTREAM_DEPRECATION_WARNING;SFML_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\sdks\sfml3\include;$(ProjectDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\sdks\sfml3\include;$(ProjectDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
@@ -138,6 +138,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app\SFML3D.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="models\simple_pyramid.txt" />
+    <Text Include="models\torus.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="models\lowpoly_skull.cid" />
+    <None Include="models\simple_pyramid.cid" />
+    <None Include="models\simple_pyramid_corrected.cid" />
+    <None Include="models\simple_pyramid_final.cid" />
+    <None Include="models\simple_pyramid_fixed.cid" />
+    <None Include="models\statue_glydon.cid" />
+    <None Include="models\statue_glydon_cleaned.cid" />
+    <None Include="models\statue_glydon_final.cid" />
+    <None Include="models\statue_glydon_fixed.cid" />
+    <None Include="models\statue_glydon_rebuilt.cid" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

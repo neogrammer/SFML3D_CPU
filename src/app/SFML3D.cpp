@@ -1,5 +1,6 @@
 #include "SFML3D.h"
-
+#include <strstream>
+#include <algorithm>
 
 bool SFML3D::wireframe = true;
 
@@ -26,7 +27,7 @@ v3d crossProd(Line3D& a, Line3D& b)
 
 }
 
-void drawLine(Line& line_, sf::RenderWindow& wnd_)
+void drawLine(Line& line_, sf::RenderWindow& wnd_, sf::Color col_ = sf::Color::Red)
 {
     sf::RectangleShape line({ line_.getMagnitude(), 1.f });
 
@@ -34,35 +35,81 @@ void drawLine(Line& line_, sf::RenderWindow& wnd_)
 
     line.rotate(angle);
     line.setPosition(line_.getStartPoint());
-    line.setFillColor(sf::Color::Red);
+    line.setFillColor(col_);
     wnd_.draw(line);
 
 }
 
-void drawTriangle(Tri2D& tri_, sf::RenderWindow& wnd_, float posx_, float posy_)
+void drawTriangle(Tri2D& tri_, sf::RenderWindow& wnd_, sf::Color col_, bool drawBoth = true)
 {
   
     if (!SFML3D::wireframe)
     {
-        sf::ConvexShape triangle{ 3 };
-        triangle.setPoint(0, tri_.vertices[0]);
-        triangle.setPoint(1, tri_.vertices[1]);
-        triangle.setPoint(2, tri_.vertices[2]);
-        triangle.setFillColor(sf::Color::Red);
+        if (!drawBoth)
+        {
+
+            sf::ConvexShape triangle{ 3 };
+            triangle.setPoint(0, tri_.vertices[0]);
+            triangle.setPoint(1, tri_.vertices[1]);
+            triangle.setPoint(2, tri_.vertices[2]);
+            triangle.setFillColor(col_);
 
 
-        wnd_.draw(triangle);
+            wnd_.draw(triangle);
+        }
+        else
+        {
+
+            sf::ConvexShape triangle{ 3 };
+            triangle.setPoint(0, tri_.vertices[0]);
+            triangle.setPoint(1, tri_.vertices[1]);
+            triangle.setPoint(2, tri_.vertices[2]);
+            triangle.setFillColor(col_);
+
+
+            wnd_.draw(triangle);
+            Line line1{ tri_.vertices[0].x , tri_.vertices[0].y ,  tri_.vertices[1].x , tri_.vertices[1].y };
+            Line line2{ tri_.vertices[1].x , tri_.vertices[1].y ,  tri_.vertices[2].x , tri_.vertices[2].y };
+            Line line3{ tri_.vertices[2].x , tri_.vertices[2].y ,  tri_.vertices[0].x , tri_.vertices[0].y };
+
+            drawLine(line1, wnd_, sf::Color::Black);
+            drawLine(line2, wnd_, sf::Color::Black);
+            drawLine(line3, wnd_, sf::Color::Black);
+
+
+        }
     }
     else
     {
+        if (!drawBoth)
+        {
+            Line line1{ tri_.vertices[0].x , tri_.vertices[0].y ,  tri_.vertices[1].x , tri_.vertices[1].y };
+            Line line2{ tri_.vertices[1].x , tri_.vertices[1].y ,  tri_.vertices[2].x , tri_.vertices[2].y };
+            Line line3{ tri_.vertices[2].x , tri_.vertices[2].y ,  tri_.vertices[0].x , tri_.vertices[0].y };
 
-        Line line1{ tri_.vertices[0].x , tri_.vertices[0].y ,  tri_.vertices[1].x , tri_.vertices[1].y };
-        Line line2{ tri_.vertices[1].x , tri_.vertices[1].y ,  tri_.vertices[2].x , tri_.vertices[2].y };
-        Line line3{ tri_.vertices[2].x , tri_.vertices[2].y ,  tri_.vertices[0].x , tri_.vertices[0].y };
+            drawLine(line1, wnd_, col_);
+            drawLine(line2, wnd_, col_);
+            drawLine(line3, wnd_, col_);
+        }
+        else
+        {
+            sf::ConvexShape triangle{ 3 };
+            triangle.setPoint(0, tri_.vertices[0]);
+            triangle.setPoint(1, tri_.vertices[1]);
+            triangle.setPoint(2, tri_.vertices[2]);
+            triangle.setFillColor(col_);
 
-        drawLine(line1, wnd_);
-        drawLine(line2, wnd_);
-        drawLine(line3, wnd_);
+
+            wnd_.draw(triangle);
+            Line line1{ tri_.vertices[0].x , tri_.vertices[0].y ,  tri_.vertices[1].x , tri_.vertices[1].y };
+            Line line2{ tri_.vertices[1].x , tri_.vertices[1].y ,  tri_.vertices[2].x , tri_.vertices[2].y };
+            Line line3{ tri_.vertices[2].x , tri_.vertices[2].y ,  tri_.vertices[0].x , tri_.vertices[0].y };
+
+            drawLine(line1, wnd_, sf::Color::Black);
+            drawLine(line2, wnd_, sf::Color::Black);
+            drawLine(line3, wnd_, sf::Color::Black);
+
+        }
     }
 }
 
@@ -82,6 +129,45 @@ void MulMatVec(v3d& i, v3d& o, Mat4x4& m)
     }
 }
 
+
+
+COLOR getColor(float lum)
+{
+    sf::Color bgCol, fgCol;
+    ShadeStyle sym;
+    int pixel_bw = (int)(13.0f * lum);
+    switch (pixel_bw)        
+    {
+    case 0:             bgCol = { sf::Color::Black };                     fgCol = { sf::Color::Black };              sym = ShadeStyle::PIXEL_SOLID;   break;
+    case 1:             bgCol = { sf::Color::Black };                     fgCol = { sf::Color::Blue };               sym = ShadeStyle::PIXEL_QUARTER;   break;
+    case 2:             bgCol = { sf::Color::Black };                     fgCol = { sf::Color::Blue };               sym = ShadeStyle::PIXEL_HALF;   break;
+    case 3:             bgCol = { sf::Color::Black };                     fgCol = { sf::Color::Blue };               sym = ShadeStyle::PIXEL_THREEQUARTERS;   break;
+    case 4:             bgCol = { sf::Color::Black };                     fgCol = { sf::Color::Blue };               sym = ShadeStyle::PIXEL_SOLID;   break;
+    case 5:             bgCol = { sf::Color::Blue };                      fgCol = { sf::Color(46,146,246,255) };     sym = ShadeStyle::PIXEL_QUARTER;   break;
+        case 6:             bgCol = { sf::Color::Black };                     fgCol = { sf::Color(46,146,246,255) };     sym = ShadeStyle::PIXEL_HALF;   break;
+        case 7:             bgCol = { sf::Color::Black };                     fgCol = { sf::Color(46,146,246,255) };     sym = ShadeStyle::PIXEL_THREEQUARTERS;   break;
+        case 8:             bgCol = { sf::Color::Black };                     fgCol = { sf::Color(46,146,246,255) };     sym = ShadeStyle::PIXEL_SOLID;   break;
+        case 9:             bgCol = { sf::Color(46,146,246,255) };            fgCol = { sf::Color::White };              sym = ShadeStyle::PIXEL_QUARTER;   break;
+        case 10:            bgCol = { sf::Color(46,146,246,255) };            fgCol = { sf::Color::White };              sym = ShadeStyle::PIXEL_HALF;   break;
+        case 11:            bgCol = { sf::Color(46,146,246,255) };            fgCol = { sf::Color::White };              sym = ShadeStyle::PIXEL_THREEQUARTERS;   break;
+        case 12:            bgCol = { sf::Color(46,146,246,255) };            fgCol = { sf::Color::White };              sym = ShadeStyle::PIXEL_SOLID;   break;
+        default:            bgCol = sf::Color::Black;                         fgCol = sf::Color::Black;                  sym = ShadeStyle::PIXEL_SOLID;  break;
+    }
+    std::uint8_t r, g, b;
+    r = 255;
+    g = 0;
+    b = 0;
+    r = std::uint8_t(lum * (float)r);
+    g = std::uint8_t(lum * (float)g);
+    b = std::uint8_t(lum * (float)b);
+
+    bgCol = sf::Color(r, g, b);
+    fgCol = sf::Color(r, g, b);
+    sym = ShadeStyle::PIXEL_SOLID;
+
+    return { bgCol,fgCol, sym };
+}
+
 SFML3D::SFML3D(sf::RenderWindow& wnd_)
     : pWnd{&wnd_}
     , triangle{ {300.f,300.f},{400.f,500.f}, {500.f, 300.f} }
@@ -98,7 +184,9 @@ bool SFML3D::onUserCreate(sf::RenderWindow& wnd_)
     pWnd = &wnd_;
 
 
-    cubeMesh.tris = {
+    cubeMesh.LoadFromObjectFile("models/torus.txt");
+
+        /*{
         {0.f,0.f,0.f,  0.f,1.f,0.f,  1.f,1.f,0.f },
         {0.f,0.f,0.f,  1.f,1.f,0.f,  1.f,0.f,0.f},  //Front
 
@@ -116,11 +204,11 @@ bool SFML3D::onUserCreate(sf::RenderWindow& wnd_)
         
         {0.f,0.f,1.f,  0.f,0.f,0.f,  1.f,0.f,0.f },
         {0.f,0.f,1.f,  1.f,0.f,0.f,  1.f,0.f,1.f} // Bottom
-    };
+    };*/
 
     float fNear = 0.1f;
     float fFar = 1000.f;
-    float fFov = 50.f;
+    float fFov = 87.f;
     float fAspectRatio = (float)WH / (float)WW;
     float fFovRad = 1.f / (float)(std::tanf(fFov * 0.5f / 180.f * (float)M_PI));
 
@@ -144,9 +232,7 @@ bool SFML3D::onUserUpdate(float elapsedTime)
     Mat4x4 matRotZ, matRotX;
     fTheta += 1.f * fElapsedTime;
     if (fTheta >= 360.f)
-    {
-        fTheta = 0.f;
-    }
+    { fTheta = 0.f; }
     // RotationZ
     matRotZ.m[0][0] = std::cosf(fTheta);
     matRotZ.m[0][1] = std::sinf(fTheta);
@@ -162,6 +248,8 @@ bool SFML3D::onUserUpdate(float elapsedTime)
     matRotX.m[2][1] = -std::sinf(fTheta*0.5f);
     matRotX.m[2][2] = std::cosf(fTheta * 0.5f);
     matRotX.m[3][3] = 1.f;
+
+    std::vector<Tri3D> vecTrianglesToRaster;
 
 
     for (auto& tri : cubeMesh.tris)
@@ -216,9 +304,25 @@ bool SFML3D::onUserUpdate(float elapsedTime)
             normal.y * (triTranslated.p[0].y - vCam.y) +
             normal.z * (triTranslated.p[0].z - vCam.z) < 0.0f)
         {
+            // Illumination
+            v3d lightDirection = { 0.f, 0.f, -1.f };
+            float l = sqrtf(lightDirection.x * lightDirection.x + lightDirection.y * lightDirection.y + lightDirection.z * lightDirection.z);
+            lightDirection.x /= 1.f; lightDirection.y /= 1.f; lightDirection.z /= 1.f;
+
+            float dp = normal.x * lightDirection.x + normal.y * lightDirection.y + normal.z * lightDirection.z;
+
+            COLOR c = getColor(dp);
+            triTranslated.col = c.bgCol;
+            triTranslated.sym = ShadeStyle::PIXEL_SOLID;
+
+
             MulMatVec(triTranslated.p[0], triProjected.p[0], matProj);
             MulMatVec(triTranslated.p[1], triProjected.p[1], matProj);
             MulMatVec(triTranslated.p[2], triProjected.p[2], matProj);
+
+            triProjected.col = triTranslated.col;
+            triProjected.sym = triTranslated.sym;
+
 
             triProjected.p[0].x += 1.f; triProjected.p[0].y += 1.f;
             triProjected.p[1].x += 1.f; triProjected.p[1].y += 1.f;
@@ -243,14 +347,77 @@ bool SFML3D::onUserUpdate(float elapsedTime)
             // triProjected.p[2].y = (triProjected.p[2].y * -sizey);
            //  triProjected.p[2].z = triRotateZX.p[2].z + 3.f;
 
-            Tri2D tri2d{ {triProjected.p[0].x, triProjected.p[0].y},{triProjected.p[1].x,triProjected.p[1].y}, {triProjected.p[2].x, triProjected.p[2].y} };
-            // Tri2D tri2d{ {posx + (0.f * sizex), posy + (0.f * -sizey)},{posx + (0.5f * sizex), posy + (1.f * sizey)}, {posx + (1.f * sizex), posy + (0.f * sizey)} };
+            vecTrianglesToRaster.push_back(triProjected);
 
-            drawTriangle(tri2d, *pWnd, 0.f, 0.f);
+
+            //Tri2D tri2d{ {triProjected.p[0].x, triProjected.p[0].y},{triProjected.p[1].x,triProjected.p[1].y}, {triProjected.p[2].x, triProjected.p[2].y} };
+            //// Tri2D tri2d{ {posx + (0.f * sizex), posy + (0.f * -sizey)},{posx + (0.5f * sizex), posy + (1.f * sizey)}, {posx + (1.f * sizex), posy + (0.f * sizey)} };
+
+            //drawTriangle(tri2d, *pWnd, triProjected.col, drawBoth);
         }
+
+
     }
    
+    std::sort(vecTrianglesToRaster.begin(), vecTrianglesToRaster.end(), [](Tri3D& t1, Tri3D& t2)
+        {
+            float z1 = (t1.p[0].z + t1.p[1].z + t1.p[2].z) / 3.f;
+            float z2 = (t2.p[0].z + t2.p[1].z + t2.p[2].z) / 3.f;
+            return z1 > z2;
+        });
+
+    for (auto& triProjected : vecTrianglesToRaster)
+    {
+        // rasterize triangle
+        Tri2D tri2d{ {triProjected.p[0].x, triProjected.p[0].y},{triProjected.p[1].x,triProjected.p[1].y}, {triProjected.p[2].x, triProjected.p[2].y} };
+        // Tri2D tri2d{ {posx + (0.f * sizex), posy + (0.f * -sizey)},{posx + (0.5f * sizex), posy + (1.f * sizey)}, {posx + (1.f * sizex), posy + (0.f * sizey)} };
+
+        drawTriangle(tri2d, *pWnd, triProjected.col, drawBoth);
+    }
+
+
+
     pWnd->display();
+
+
+    return true;
+}
+
+bool Mesh::LoadFromObjectFile(std::string filename)
+{
+    
+    std::ifstream f(filename);
+    if (!f.is_open())
+        return false;
+
+    // local cache of verts
+    std::vector<v3d> verts;
+
+    while (!f.eof())
+    {
+        char line[128];
+        f.getline(line, 128);
+
+        std::strstream s;
+        s << line;
+        char junk;
+        if (line[0] == 'v')
+        {
+            v3d v;
+            s >> junk >> v.x >> v.y >> v.z;
+            verts.push_back(v);
+        }
+
+        if (line[0] == 'f')
+        {
+            int f[3];
+            s >> junk >> f[0] >> f[1] >> f[2];
+            tris.push_back({ verts[f[0] - 1], verts[f[1] - 1], verts[f[2] - 1] });
+        }
+
+        
+    }
+
 
 
     return true;

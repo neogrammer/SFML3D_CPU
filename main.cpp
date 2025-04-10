@@ -35,6 +35,10 @@ int main()
                 {
                     SFML3D::wireframe = !SFML3D::wireframe;
                 }
+                else  if (keyReleased->scancode == sf::Keyboard::Scancode::F)
+                {
+                    app.drawBoth = !app.drawBoth;
+                }
             }
         }
         app.onUserUpdate(elapsedTime);
