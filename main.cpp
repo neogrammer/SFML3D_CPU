@@ -28,6 +28,14 @@ int main()
         {
             if (event->is<sf::Event::Closed>())
                 window.close();
+
+            else if (const auto* keyReleased = event->getIf<sf::Event::KeyReleased>())
+                {
+                if (keyReleased->scancode == sf::Keyboard::Scancode::W)
+                {
+                    SFML3D::wireframe = !SFML3D::wireframe;
+                }
+            }
         }
         app.onUserUpdate(elapsedTime);
     }

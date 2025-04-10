@@ -114,6 +114,9 @@ struct Mat4x4
 
 class SFML3D
 {
+
+   
+
     sf::Clock timer{};
     float fElapsedTime{ 0.f };
     float fTheta{ 0.f };
@@ -126,6 +129,8 @@ class SFML3D
     // create an empty shape
     sf::RenderWindow* pWnd{ nullptr };
 public:
+    static bool wireframe;
+
     SFML3D(sf::RenderWindow& wnd_);
     ~SFML3D();
     bool onUserCreate(sf::RenderWindow& wnd_);

@@ -1,5 +1,9 @@
 #include "SFML3D.h"
 
+
+bool SFML3D::wireframe = true;
+
+
 float dot(v3d& a, v3d& b)
 {
     float l1 = sqrtf(a.x * a.x + a.y * a.y + a.z * a.z);
@@ -37,23 +41,29 @@ void drawLine(Line& line_, sf::RenderWindow& wnd_)
 
 void drawTriangle(Tri2D& tri_, sf::RenderWindow& wnd_, float posx_, float posy_)
 {
-   // Line line1{ tri_.vertices[0].x , tri_.vertices[0].y ,  tri_.vertices[1].x , tri_.vertices[1].y };
-   // Line line2{ tri_.vertices[1].x , tri_.vertices[1].y ,  tri_.vertices[2].x , tri_.vertices[2].y  };
-   // Line line3{ tri_.vertices[2].x , tri_.vertices[2].y ,  tri_.vertices[0].x , tri_.vertices[0].y  };
-
-    sf::ConvexShape triangle{ 3 };
-    triangle.setPoint(0, tri_.vertices[0]);
-    triangle.setPoint(1, tri_.vertices[1]);
-    triangle.setPoint(2, tri_.vertices[2]);
-    triangle.setFillColor(sf::Color::Red);
-
-
-    wnd_.draw(triangle);
+  
+    if (!SFML3D::wireframe)
+    {
+        sf::ConvexShape triangle{ 3 };
+        triangle.setPoint(0, tri_.vertices[0]);
+        triangle.setPoint(1, tri_.vertices[1]);
+        triangle.setPoint(2, tri_.vertices[2]);
+        triangle.setFillColor(sf::Color::Red);
 
 
-   // drawLine(line1, wnd_);
-   // drawLine(line2, wnd_);
-   // drawLine(line3, wnd_);
+        wnd_.draw(triangle);
+    }
+    else
+    {
+
+        Line line1{ tri_.vertices[0].x , tri_.vertices[0].y ,  tri_.vertices[1].x , tri_.vertices[1].y };
+        Line line2{ tri_.vertices[1].x , tri_.vertices[1].y ,  tri_.vertices[2].x , tri_.vertices[2].y };
+        Line line3{ tri_.vertices[2].x , tri_.vertices[2].y ,  tri_.vertices[0].x , tri_.vertices[0].y };
+
+        drawLine(line1, wnd_);
+        drawLine(line2, wnd_);
+        drawLine(line3, wnd_);
+    }
 }
 
 void MulMatVec(v3d& i, v3d& o, Mat4x4& m)
@@ -126,6 +136,8 @@ bool SFML3D::onUserCreate(sf::RenderWindow& wnd_)
 
 bool SFML3D::onUserUpdate(float elapsedTime)
 {
+    
+
     pWnd->clear(sf::Color(sf::Color::Blue));
 
     fElapsedTime = timer.restart().asSeconds();
@@ -165,9 +177,9 @@ bool SFML3D::onUserUpdate(float elapsedTime)
         MulMatVec(triRotatedZ.p[2], triRotatedZX.p[2], matRotX);
 
         triTranslated = triRotatedZX;
-        triTranslated.p[0].z = triRotatedZX.p[0].z + 3.f;
-        triTranslated.p[1].z = triRotatedZX.p[1].z + 3.f;
-        triTranslated.p[2].z = triRotatedZX.p[2].z + 3.f;
+        triTranslated.p[0].z = triRotatedZX.p[0].z + 8.f;
+        triTranslated.p[1].z = triRotatedZX.p[1].z + 8.f;
+        triTranslated.p[2].z = triRotatedZX.p[2].z + 8.f;
 
 
         //  
