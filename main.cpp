@@ -8,7 +8,7 @@ int main()
     settings.antiAliasingLevel = 8;
 
 
-    sf::RenderWindow window(sf::VideoMode({ 1600, 900 }), "SFML works!", sf::State::Windowed, settings);
+    sf::RenderWindow window(sf::VideoMode({ WW, WH }), "SFML works!", sf::State::Windowed, settings);
 
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);

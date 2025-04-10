@@ -5,6 +5,11 @@
 #include <corecrt_math_defines.h>
 #include <array>
 #include <vector>
+
+constexpr uint32_t WW = 1600Ui32;
+constexpr uint32_t WH = 900Ui32;
+
+
 struct v3d
 {
     float x, y, z;
