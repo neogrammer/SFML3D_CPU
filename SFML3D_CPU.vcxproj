@@ -154,8 +154,14 @@
     <None Include="models\statue_glydon_final.cid" />
     <None Include="models\statue_glydon_fixed.cid" />
     <None Include="models\statue_glydon_rebuilt.cid" />
-    <None Include="models\TorusZbackward.obj" />
+    <None Include="models\TorusZbackward.cid" />
     <None Include="models\TorusZforward.cid" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="models\axis.cid" />
+    <Object Include="models\mountains.cid" />
+    <Object Include="models\teapot.cid" />
+    <Object Include="models\VideoShip.cid" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

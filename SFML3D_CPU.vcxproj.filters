@@ -72,11 +72,25 @@
     <None Include="models\lowpoly_skull.cid">
       <Filter>models</Filter>
     </None>
-    <None Include="models\TorusZbackward.obj">
+    <None Include="models\TorusZbackward.cid">
       <Filter>models</Filter>
     </None>
     <None Include="models\TorusZforward.cid">
       <Filter>models</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="models\axis.cid">
+      <Filter>models</Filter>
+    </Object>
+    <Object Include="models\mountains.cid">
+      <Filter>models</Filter>
+    </Object>
+    <Object Include="models\teapot.cid">
+      <Filter>models</Filter>
+    </Object>
+    <Object Include="models\VideoShip.cid">
+      <Filter>models</Filter>
+    </Object>
   </ItemGroup>
 </Project>
