@@ -72,5 +72,11 @@
     <None Include="models\lowpoly_skull.cid">
       <Filter>models</Filter>
     </None>
+    <None Include="models\TorusZbackward.obj">
+      <Filter>models</Filter>
+    </None>
+    <None Include="models\TorusZforward.cid">
+      <Filter>models</Filter>
+    </None>
   </ItemGroup>
 </Project>

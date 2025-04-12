@@ -2,6 +2,12 @@
 #include <strstream>
 #include <algorithm>
 
+#define GLM_FORCE_RADIANS
+#define GLM_SWIZZLE
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+
 bool SFML3D::wireframe = true;
 
 
@@ -184,14 +190,13 @@ bool SFML3D::onUserCreate(sf::RenderWindow& wnd_)
     pWnd = &wnd_;
 
 
-    cubeMesh.LoadFromObjectFile("models/torus.txt");
+    //cubeMesh.LoadFromObjectFile("models/TorusZforward.cid");
+    cubeMesh.tris = {
+        { 0.f, 0.f, 0.f,   0.f, 1.f, 0.f,   1.f, 1.f, 0.f}, 
+        {0.f, 0.f, 0.f,  1.f, 1.f, 0.f,   1.f, 0.f, 0.f}, // FRONT
 
-        /*{
-        {0.f,0.f,0.f,  0.f,1.f,0.f,  1.f,1.f,0.f },
-        {0.f,0.f,0.f,  1.f,1.f,0.f,  1.f,0.f,0.f},  //Front
-
-        {1.f,0.f,1.f,  1.f,1.f,1.f,  0.f,1.f,1.f },
-        {1.f,0.f,1.f,  0.f,1.f,1.f,  0.f,0.f,1.f},  // Back
+        { 1.f, 0.f, 1.f,   1.f, 1.f, 1.f,   0.f, 1.f, 1.f},
+        {1.f, 0.f, 1.f,  0.f, 1.f, 1.f,   0.f, 0.f, 1.f}, // BACK
 
         {1.f,0.f,0.f,  1.f,1.f,0.f,  1.f,1.f,1.f },
         {1.f,0.f,0.f,  1.f,1.f,1.f,  1.f,0.f,1.f},  // East
@@ -204,7 +209,7 @@ bool SFML3D::onUserCreate(sf::RenderWindow& wnd_)
         
         {0.f,0.f,1.f,  0.f,0.f,0.f,  1.f,0.f,0.f },
         {0.f,0.f,1.f,  1.f,0.f,0.f,  1.f,0.f,1.f} // Bottom
-    };*/
+    };
 
     float fNear = 0.1f;
     float fFar = 1000.f;
@@ -265,9 +270,9 @@ bool SFML3D::onUserUpdate(float elapsedTime)
         MulMatVec(triRotatedZ.p[2], triRotatedZX.p[2], matRotX);
 
         triTranslated = triRotatedZX;
-        triTranslated.p[0].z = triRotatedZX.p[0].z + 8.f;
-        triTranslated.p[1].z = triRotatedZX.p[1].z + 8.f;
-        triTranslated.p[2].z = triRotatedZX.p[2].z + 8.f;
+        triTranslated.p[0].z = triRotatedZX.p[0].z + 3.f;
+        triTranslated.p[1].z = triRotatedZX.p[1].z + 3.f;
+        triTranslated.p[2].z = triRotatedZX.p[2].z + 3.f;
 
 
         //  

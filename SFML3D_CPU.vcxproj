@@ -106,7 +106,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir);C:\sdks\sfml3\include;$(ProjectDir)src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);C:\sdks\sfml3\include;$(ProjectDir)src;$(ProjectDir)src/external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
@@ -154,6 +154,8 @@
     <None Include="models\statue_glydon_final.cid" />
     <None Include="models\statue_glydon_fixed.cid" />
     <None Include="models\statue_glydon_rebuilt.cid" />
+    <None Include="models\TorusZbackward.obj" />
+    <None Include="models\TorusZforward.cid" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
