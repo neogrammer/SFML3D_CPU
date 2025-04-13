@@ -31,11 +31,11 @@ int main()
 
             else if (const auto* keyReleased = event->getIf<sf::Event::KeyReleased>())
                 {
-                if (keyReleased->scancode == sf::Keyboard::Scancode::W)
+                if (keyReleased->scancode == sf::Keyboard::Scancode::Y)
                 {
                     SFML3D::wireframe = !SFML3D::wireframe;
                 }
-                else  if (keyReleased->scancode == sf::Keyboard::Scancode::F)
+                else  if (keyReleased->scancode == sf::Keyboard::Scancode::H)
                 {
                     app.drawBoth = !app.drawBoth;
                 }

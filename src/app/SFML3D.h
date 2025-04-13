@@ -15,7 +15,10 @@ constexpr uint32_t WH = 900Ui32;
 
 struct v3d
 {
-    float x, y, z;
+    float x{ 0.f };
+    float y{ 0.f };
+    float z{ 0.f };
+    float w{ 1.f };
 };
 
 struct Line
@@ -73,9 +76,18 @@ private:
 
 };
 
+enum class FaceType
+{
+    Top,
+    Side,
+    Bottom
+};
+
 
 struct Tri2D
 {
+    FaceType faceType;
+
     std::array<sf::Vector2f, 3> vertices;
 
     Tri2D(sf::Vector2f v1_, sf::Vector2f v2_, sf::Vector2f v3_)
@@ -121,12 +133,15 @@ struct Tri3D {
 
     ShadeStyle sym{};
     sf::Color col{};
+
+    FaceType faceType;
 };
 
 
 struct Mesh
 {
     std::vector<Tri3D> tris;
+    std::vector<FaceType> faceTypes;
     bool LoadFromObjectFile(std::string filename);
 };
 
@@ -135,10 +150,6 @@ struct Mat4x4
     float m[4][4] = { {0.f, }, };
 };
 
-v3d vAdd(v3d& v1, v3d& v2)
-{
-    return {v1.x + v2.x, v1.y + v2.y, v1.z + v2.z};
-}
 
 class SFML3D
 {
@@ -150,6 +161,9 @@ class SFML3D
     float fTheta{ 0.f };
     Mat4x4 matProj{};
 
+    
+    v3d vLookDir;	// Direction vector along the direction camera points
+    float fYaw;		// FPS Camera rotation in XZ plane
     v3d vCam;
 
     Tri2D triangle;
@@ -157,6 +171,12 @@ class SFML3D
     // create an empty shape
     sf::RenderWindow* pWnd{ nullptr };
 public:
+    static sf::Texture texGrass;
+    static sf::Texture texTop;
+    static sf::Texture texSide;
+    static sf::Texture texBottom;
+
+
     static bool wireframe;
     bool drawBoth{ false };
 
